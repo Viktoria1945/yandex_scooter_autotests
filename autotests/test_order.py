@@ -1,23 +1,21 @@
 # Виктория Мотина, 48-я когорта — Финальный проект. Инженер по тестированию плюс
 
-# Импорт необходимых модулей
 import sender_stand_request
 import data
 
 
-# Тест: создание заказа и получение его по треку
-def test_create_and_get_order():
-    # Создаём заказ
+# Тест 1: Создание заказа
+def test_create_order():
     response = sender_stand_request.post_new_order(data.order_body)
-    
-    # Проверяем, что заказ создан (код 201)
     assert response.status_code == 201
-    
-    # Сохраняем трек заказа
-    track = response.json()["track"]
-    
+
+
+# Тест 2: Получение заказа по треку
+def test_get_order_by_track():
+    # Сначала создаём заказ, чтобы получить трек
+    response_create = sender_stand_request.post_new_order(data.order_body)
+    track = response_create.json()["track"]
+
     # Получаем заказ по треку
     response_get = sender_stand_request.get_order_by_track(track)
-    
-    # Проверяем, что код ответа равен 200
     assert response_get.status_code == 200
